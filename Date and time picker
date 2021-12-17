@@ -1,0 +1,54 @@
+List TIME_SLOTE_LIST = [];
+    //List x = [];
+    timeSloteSelection(String dayname) {
+      var indexday = loginNotifier.currentLogin.dayName!.indexOf(dayname);
+      if (indexday == -1) {
+        return;
+      }
+      var time =
+          loginNotifier.currentLogin.daytime![indexday].toString().split("-");
+      var startHour = int.parse((time[0].toString().split(":")[0]));
+      var startMinute =
+          int.parse(time[0].toString().split(":")[1].toString().split(" ")[0]);
+      if (time[0].contains("PM")) {
+        startHour += 12;
+      }
+      var endHour = int.parse((time[1].toString().split(":")[0]));
+      var endMinute =
+          int.parse(time[1].toString().split(":")[1].toString().split(" ")[0]);
+      if (time[1].contains("PM")) {
+        endHour += 12;
+      }
+      var startTime = DateTime.now().add(Duration(days: currentDateTimeIndex));
+      startTime = new DateTime(startTime.year, startTime.month, startTime.day,
+          startHour, startMinute);
+      if (startTime.compareTo(DateTime.now()) < 0) {
+        if (DateTime.now().minute < 30) {
+          startTime = new DateTime(startTime.year, startTime.month,
+              startTime.day, DateTime.now().hour, 30);
+        } else {
+          startTime = new DateTime(startTime.year, startTime.month,
+              startTime.day, DateTime.now().hour + 1, 0);
+        }
+      }
+      var endTime = new DateTime(
+          startTime.year, startTime.month, startTime.day, endHour, endMinute);
+      // print("start day" + startTime.toString());
+      // print("end day" + endTime.toString());
+      TIME_SLOTE_LIST = [];
+      while (startTime.compareTo(endTime) < 0) {
+        var start =
+            startTime.hour.toString() + "." + startTime.minute.toString();
+        startTime = startTime.add(Duration(minutes: 30));
+        var end = startTime.hour.toString() + "." + startTime.minute.toString();
+        var temp = start + " - " + end;
+        TIME_SLOTE_LIST.add(temp);
+      }
+      // print("time slote list ${TIME_SLOTE_LIST}");
+    }
+    
+    
+     dayName = DateFormat('EEEE').format(now);
+                                    dayDate = DateFormat('d').format(now);
+                                    dayYear = DateFormat('yMMMM')
+                                        .format(DateTime.now());
