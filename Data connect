@@ -1,0 +1,34 @@
+class LoginNotifier extends ChangeNotifier {
+  List<LoginModel> _loginList = [];
+  LoginModel? _currentLogin;
+
+  UnmodifiableListView<LoginModel> get loginList =>
+      UnmodifiableListView(_loginList);
+
+  LoginModel get currentLogin => _currentLogin!;
+
+  set loginList(List<LoginModel> loginListData) {
+    _loginList = loginListData;
+    notifyListeners();
+  }
+
+  set currentLoginData(LoginModel login) {
+    _currentLogin = login;
+    notifyListeners();
+  }
+}
+
+getLogin(LoginNotifier loginNotifier) async {
+  List<LoginModel> _loginList = [];
+
+  var loginSalonData = FirebaseFirestore.instance.collection("Users");
+
+  var snapshot = await loginSalonData.get();
+  // snapshot.docChanges.forEach((element) { })
+  snapshot.docs.forEach((element) {
+    LoginModel login = LoginModel.fromJson(element.data());
+    _loginList.add(login);
+  });
+
+  loginNotifier.loginList = _loginList;
+}
